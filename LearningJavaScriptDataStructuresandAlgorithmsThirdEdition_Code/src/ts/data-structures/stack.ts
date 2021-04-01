@@ -1,59 +1,79 @@
 export default class Stack<T> {
-  private count: number;
-  private items: any;
+  // 存储的Map
+  private items: Map<number, T>;
 
+  //
   constructor() {
-    this.count = 0;
-    this.items = {};
+    this.items = new Map();
   }
 
+  /**
+   * @description: 入栈
+   * @param {T} element 要入栈的元素
+   */
   push(element: T) {
-    this.items[this.count] = element;
-    this.count++;
+    this.items.set(this.items.size, element);
   }
 
-  pop() {
+  /**
+   * @description: 出栈
+   * @return {T} 返回出栈的元素
+   */
+  pop(): T {
     if (this.isEmpty()) {
       return undefined;
     }
-    this.count--;
-    const result = this.items[this.count];
-    delete this.items[this.count];
+    const result = this.items.get(this.items.size - 1);
+    this.items.delete(this.items.size - 1);
     return result;
   }
 
-  peek() {
+  /**
+   * @description: 返回栈顶的元素
+   * @return {T}
+   */
+  peek(): T {
     if (this.isEmpty()) {
       return undefined;
     }
-    return this.items[this.count - 1];
+    return this.items.get(this.items.size - 1);
   }
 
-  isEmpty() {
-    return this.count === 0;
+  /**
+   * @description: 返回栈是否为空
+   * @return {Boolean}
+   */
+  isEmpty(): boolean {
+    return this.items.size === 0;
   }
 
-  size() {
-    return this.count;
+  /**
+   * @description: 返回栈里的元素个数
+   * @return {Number}
+   */
+  size(): number {
+    return this.items.size;
   }
 
+  /**
+   * @description: 清空栈
+   */
   clear() {
-    /* while (!this.isEmpty()) {
-      this.pop();
-    } */
-
-    this.items = {};
-    this.count = 0;
+    this.items.clear();
   }
 
-  toString() {
+  /**
+   * @description: 覆盖Object默认的toString
+   * @return {String}
+   */
+  toString(): string {
     if (this.isEmpty()) {
-      return '';
+      return "";
     }
-    let objString = `${this.items[0]}`;
-    for (let i = 1; i < this.count; i++) {
-      objString = `${objString},${this.items[i]}`;
-    }
-    return objString;
+    let result: string = "";
+    this.items.forEach((value, key) => {
+      result = `${result}${key === 0 ? "" : ","}${value}`;
+    });
+    return result;
   }
 }

@@ -1,57 +1,84 @@
 export default class Queue<T> {
   private count: number;
   private lowestCount: number;
-  private items: any;
+  private items: Map<number, T>;
 
   constructor() {
     this.count = 0;
     this.lowestCount = 0;
-    this.items = {};
+    this.items = new Map();
   }
 
-  enqueue(element: T) {
-    this.items[this.count] = element;
+  /**
+   * @description: 在count方向（队列底部）入队
+   * @param {T} element
+   */
+  enqueue(element: T): void {
+    this.items.set(this.count, element);
     this.count++;
   }
 
-  dequeue() {
+  /**
+   * @description: 在lowestCount方向（队列顶部）出队
+   * @return {T} element
+   */
+  dequeue(): T {
     if (this.isEmpty()) {
       return undefined;
     }
-    const result = this.items[this.lowestCount];
-    delete this.items[this.lowestCount];
+    const result: T = this.items.get(this.lowestCount);
+    this.items.delete(this.lowestCount);
     this.lowestCount++;
     return result;
   }
 
-  peek() {
+  /**
+   * @description: 返回队列顶部的元素
+   * @return {T} element
+   */
+  peek(): T {
     if (this.isEmpty()) {
       return undefined;
     }
-    return this.items[this.lowestCount];
+    return this.items.get(this.lowestCount);
   }
 
-  isEmpty() {
-    return this.size() === 0;
+  /**
+   * @description: 返回队列是否为空
+   * @return {Boolean}
+   */
+  isEmpty(): boolean {
+    return this.items.size === 0;
   }
 
-  clear() {
-    this.items = {};
+  /**
+   * @description: 清空队列
+   */
+  clear(): void {
+    this.items = new Map();
     this.count = 0;
     this.lowestCount = 0;
   }
 
-  size() {
-    return this.count - this.lowestCount;
+  /**
+   * @description: 返回队列元素的数目
+   * @return {Number}
+   */
+  size(): number {
+    return this.items.size;
   }
 
-  toString() {
+  /**
+   * @description: 覆盖Object默认的toString
+   * @return {String}
+   */
+  toString(): string {
     if (this.isEmpty()) {
-      return '';
+      return "";
     }
-    let objString = `${this.items[this.lowestCount]}`;
+    let objString: string = `${this.items.get(this.lowestCount)}`;
     for (let i = this.lowestCount + 1; i < this.count; i++) {
-      objString = `${objString},${this.items[i]}`;
+      objString = `${objString},${this.items.get(i)}`;
     }
     return objString;
   }

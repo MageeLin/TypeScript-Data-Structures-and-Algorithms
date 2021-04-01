@@ -1,20 +1,25 @@
-import { defaultEquals, IEqualsFunction } from '../util';
-import { Node } from './models/linked-list-models';
+import { defaultEquals, IEqualsFunction } from "../util";
+import { Node } from "./models/linked-list-models";
 
 export default class LinkedList<T> {
   protected count = 0;
-  protected head: Node<T> | undefined;
+  protected head?: Node<T>;
 
   constructor(protected equalsFn: IEqualsFunction<T> = defaultEquals) {}
 
+  /**
+   * @description: 向链表尾部添加一个元素
+   * @param {T} element
+   */
   push(element: T) {
     const node = new Node(element);
     let current;
 
+    // 第一个元素时直接添加
     if (this.head == null) {
-      // catches null && undefined
       this.head = node;
     } else {
+      // 找到最后一个元素，在它之后添加
       current = this.head;
 
       while (current.next != null) {
@@ -26,7 +31,12 @@ export default class LinkedList<T> {
     this.count++;
   }
 
-  getElementAt(index: number) {
+  /**
+   * @description:
+   * @param {number} index
+   * @return {Node<T>}
+   */
+  getNodeAt(index: number): Node<T> {
     if (index >= 0 && index <= this.count) {
       let node = this.head;
       for (let i = 0; i < index && node != null; i++) {
@@ -35,6 +45,10 @@ export default class LinkedList<T> {
       return node;
     }
     return undefined;
+  }
+
+  getElementAt(index: number): T {
+    return this.getNodeAt(index)?.element;
   }
 
   insert(element: T, index: number) {
@@ -46,7 +60,7 @@ export default class LinkedList<T> {
         node.next = current;
         this.head = node;
       } else {
-        const previous = this.getElementAt(index - 1);
+        const previous = this.getNodeAt(index - 1);
         node.next = previous.next;
         previous.next = node;
       }
@@ -63,7 +77,7 @@ export default class LinkedList<T> {
       if (index === 0) {
         this.head = current.next;
       } else {
-        const previous = this.getElementAt(index - 1);
+        const previous = this.getNodeAt(index - 1);
         current = previous.next;
         previous.next = current.next;
       }
@@ -110,7 +124,7 @@ export default class LinkedList<T> {
 
   toString() {
     if (this.head == null) {
-      return '';
+      return "";
     }
     let objString = `${this.head.element}`;
     let current = this.head.next;

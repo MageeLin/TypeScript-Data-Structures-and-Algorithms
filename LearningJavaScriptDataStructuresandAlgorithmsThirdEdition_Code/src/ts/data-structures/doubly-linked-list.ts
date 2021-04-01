@@ -47,7 +47,7 @@ export default class DoublyLinkedList<T> extends LinkedList<T> {
         node.prev = current;
         this.tail = node;
       } else {
-        const previous = this.getElementAt(index - 1);
+        const previous = this.getNodeAt(index - 1);
         current = previous.next;
         node.next = current;
         previous.next = node;
@@ -80,7 +80,7 @@ export default class DoublyLinkedList<T> extends LinkedList<T> {
         this.tail = current.prev;
         this.tail.next = undefined;
       } else {
-        current = this.getElementAt(index);
+        current = this.getNodeAt(index);
         const previous = current.prev;
         // link previous with current's next - skip it to remove
         previous.next = current.next; // {6}

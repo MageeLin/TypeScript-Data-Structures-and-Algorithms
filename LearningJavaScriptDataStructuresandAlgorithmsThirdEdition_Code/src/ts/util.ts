@@ -1,5 +1,6 @@
 export type ICompareFunction<T> = (a: T, b: T) => number;
 
+// 规定了自定义相等比较函数的类型
 export type IEqualsFunction<T> = (a: T, b: T) => boolean;
 
 export type IDiffFunction<T> = (a: T, b: T) => number;
@@ -29,6 +30,12 @@ export function defaultCompare<T>(a: T, b: T): number {
   return a < b ? Compare.LESS_THAN : Compare.BIGGER_THAN;
 }
 
+/**
+ * @description: 默认的相等比较函数，三等比较
+ * @param {T} a
+ * @param {T} b
+ * @return {boolean} 返回a、b是否相等
+ */
 export function defaultEquals<T>(a: T, b: T): boolean {
   return a === b;
 }

@@ -94,7 +94,7 @@ describe('DoublyLinkedList', () => {
     pushesElements();
 
     for (let i = min; i <= max; i++) {
-      node = list.getElementAt(i - 1);
+      node = list.getNodeAt(i - 1);
       expect(node).to.not.be.an('undefined');
       if (node) {
         expect(node.element).to.equal(i);

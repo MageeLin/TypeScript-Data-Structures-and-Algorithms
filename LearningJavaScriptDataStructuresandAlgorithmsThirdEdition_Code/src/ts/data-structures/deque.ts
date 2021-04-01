@@ -1,89 +1,118 @@
 export default class Deque<T> {
   private count: number;
   private lowestCount: number;
-  private items: any;
+  private items: Map<number, T>;
 
   constructor() {
     this.count = 0;
     this.lowestCount = 0;
-    this.items = {};
+    this.items = new Map();
   }
 
-  addFront(element: T) {
-    if (this.isEmpty()) {
-      this.addBack(element);
-    } else if (this.lowestCount > 0) {
-      this.lowestCount--;
-      this.items[this.lowestCount] = element;
-    } else {
-      for (let i = this.count; i > 0; i--) {
-        this.items[i] = this.items[i - 1];
-      }
-      this.count++;
-      this.items[0] = element;
-    }
+  /**
+   * @description: 在lowestCount方向（队列顶部）入队
+   * @param {T} element
+   */
+  addFront(element: T): void {
+    this.lowestCount--;
+    this.items.set(this.lowestCount, element);
   }
 
-  addBack(element: T) {
-    this.items[this.count] = element;
+  /**
+   * @description: 在count方向（队列底部）入队
+   * @param {T} element
+   */
+  addBack(element: T): void {
+    this.items.set(this.count, element);
     this.count++;
   }
 
-  removeFront() {
+  /**
+   * @description: 在lowestCount方向（队列顶部）出队
+   * @return {T} element
+   */
+  removeFront(): T {
     if (this.isEmpty()) {
       return undefined;
     }
-    const result = this.items[this.lowestCount];
-    delete this.items[this.lowestCount];
+    const result = this.items.get(this.lowestCount);
+    this.items.delete(this.lowestCount);
     this.lowestCount++;
     return result;
   }
 
-  removeBack() {
+  /**
+   * @description: 在count方向（队列底部）出队
+   * @return {T} element
+   */
+  removeBack(): T {
     if (this.isEmpty()) {
       return undefined;
     }
     this.count--;
-    const result = this.items[this.count];
-    delete this.items[this.count];
+    const result = this.items.get(this.count);
+    this.items.delete(this.count);
     return result;
   }
 
-  peekFront() {
+  /**
+   * @description: 返回队列顶部的元素
+   * @return {T} element
+   */
+  peekFront(): T {
     if (this.isEmpty()) {
       return undefined;
     }
-    return this.items[this.lowestCount];
+    return this.items.get(this.lowestCount);
   }
 
-  peekBack() {
+  /**
+   * @description: 返回队列底部的元素
+   * @return {T} element
+   */
+  peekBack(): T {
     if (this.isEmpty()) {
       return undefined;
     }
-    return this.items[this.count - 1];
+    return this.items.get(this.count - 1);
   }
 
-  isEmpty() {
-    return this.size() === 0;
+  /**
+   * @description: 返回队列是否为空
+   * @return {Boolean}
+   */
+  isEmpty(): boolean {
+    return this.items.size === 0;
   }
 
-  clear() {
-    this.items = {};
+  /**
+   * @description: 清空队列
+   */
+  clear(): void {
+    this.items = new Map();
     this.count = 0;
     this.lowestCount = 0;
   }
 
-  size() {
-    return this.count - this.lowestCount;
+  /**
+   * @description: 返回队列元素的数目
+   * @return {Number}
+   */
+  size(): number {
+    return this.items.size;
   }
 
-  toString() {
+  /**
+   * @description: 覆盖Object默认的toString
+   * @return {String}
+   */
+  toString(): string {
     if (this.isEmpty()) {
-      return '';
+      return "";
     }
-    let objString = `${this.items[this.lowestCount]}`;
+    let objString: string = `${this.items.get(this.lowestCount)}`;
     for (let i = this.lowestCount + 1; i < this.count; i++) {
-      objString = `${objString},${this.items[i]}`;
+      objString = `${objString},${this.items.get(i)}`;
     }
     return objString;
   }

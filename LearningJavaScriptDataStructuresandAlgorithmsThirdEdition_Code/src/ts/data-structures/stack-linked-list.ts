@@ -23,7 +23,7 @@ export default class StackLinkedList<T> {
     if (this.isEmpty()) {
       return undefined;
     }
-    return this.items.getElementAt(this.size() - 1).element;
+    return this.items.getNodeAt(this.size() - 1).element;
   }
 
   isEmpty() {

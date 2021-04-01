@@ -59,15 +59,15 @@ describe('LinkedList', () => {
   });
 
   it('returns element at specific index', () => {
-    let node;
+    let element;
 
     pushesElements();
 
     for (let i = min; i <= max; i++) {
-      node = list.getElementAt(i - 1);
-      expect(node).to.not.be.an('undefined');
-      if (node) {
-        expect(node.element).to.equal(i);
+      element = list.getElementAt(i - 1);
+      expect(element).to.not.be.an('undefined');
+      if (element) {
+        expect(element).to.equal(i);
       }
     }
   });
