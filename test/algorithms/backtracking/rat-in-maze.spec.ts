@@ -1,6 +1,6 @@
 import 'mocha';
 import { expect } from 'chai';
-import { ratInAMaze } from '../../../../src/ts/index';
+import { ratInAMaze } from '../../../src/index';
 
 describe('Rat in a maze', () => {
   it('rat in a maze solver', () => {

@@ -1,6 +1,6 @@
 import 'mocha';
 import { expect } from 'chai';
-import StackArray from '../../../src/ts/data-structures/stack-array';
+import StackArray from '../../src/data-structures/stack-array';
 
 describe('StackArray', () => {
   let stack: StackArray<number>;

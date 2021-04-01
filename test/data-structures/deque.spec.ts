@@ -1,6 +1,6 @@
 import 'mocha';
 import { expect } from 'chai';
-import Deque from '../../../src/ts/data-structures/deque';
+import Deque from '../../src/data-structures/deque';
 
 describe('Deque', () => {
   let deque: Deque<number>;

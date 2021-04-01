@@ -1,6 +1,6 @@
 import 'mocha';
 import { expect } from 'chai';
-import { AVLTree } from '../../../src/ts/index';
+import { AVLTree } from '../../src/index';
 
 describe('AVLTree', () => {
   let tree: AVLTree<number>;

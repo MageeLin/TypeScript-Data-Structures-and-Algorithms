@@ -15,11 +15,11 @@
   "homepage": "https://github.com/MageeLin/TypeScript-Data-Structures-and-Algorithms",
   "scripts": {
     "clean": "rm -rf ./dist ./coverage ./.nyc_output ./coverage.lcov ./mochawesome-report",
-    "build:ts": "tsc -p ./ --rootDir ./src/ts",
+    "build:ts": "tsc -p ./ --rootDir ./src",
     "build": "npm run build:ts",
-    "lint:ts": "tslint -c tslint.json 'src/ts/**/*.ts' && tslint -c tslint.json 'test/ts/**/*.ts'",
+    "lint:ts": "tslint -c tslint.json 'src/**/*.ts' && tslint -c tslint.json 'test/**/*.ts'",
     "lint": "npm run lint:ts",
-    "test:ts": "mocha -r ts-node/register ./test/ts/**/*.spec.ts ./test/ts/**/**/*.spec.ts --recursive",
+    "test:ts": "mocha -r ts-node/register ./test/**/*.spec.ts ./test/**/**/*.spec.ts --recursive",
     "test": "npm run test:ts",
     "dev": "npm run clean && npm run lint && npm run webpack && npm run generate-report",
     "dev2": "npm run clean && npm run lint && npm run webpack && npm run generate-report2",
@@ -32,8 +32,8 @@
   },
   "nyc": {
     "include": [
-      "src/ts/*.ts",
-      "src/ts/**/*.ts"
+      "src/*.ts",
+      "src/**/*.ts"
     ],
     "exclude": [
       "typings"

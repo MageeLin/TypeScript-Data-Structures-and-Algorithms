@@ -1,6 +1,6 @@
 import 'mocha';
 import { expect } from 'chai';
-import { lcsRecursive } from '../../../../src/ts/index';
+import { lcsRecursive } from '../../../src/index';
 
 describe('LCS Greedy', () => {
 

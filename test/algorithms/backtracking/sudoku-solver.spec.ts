@@ -1,6 +1,6 @@
 import 'mocha';
 import { expect } from 'chai';
-import { sudokuSolver } from '../../../../src/ts/index';
+import { sudokuSolver } from '../../../src/index';
 
 describe('Sudoku Solver', () => {
   it('sudoku solver', () => {

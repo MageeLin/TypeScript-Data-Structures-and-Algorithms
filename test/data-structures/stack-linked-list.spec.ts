@@ -1,6 +1,6 @@
 import 'mocha';
 import { expect } from 'chai';
-import { StackLinkedList } from '../../../src/ts/index';
+import { StackLinkedList } from '../../src/index';
 import MyObj from './my-obj';
 
 describe('StackLinkedList', () => {

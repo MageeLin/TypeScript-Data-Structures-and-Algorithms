@@ -1,6 +1,6 @@
 import 'mocha';
 import { expect } from 'chai';
-import { fibonacci, fibonacciIterative, fibonacciMemoization } from '../../../src/ts/index';
+import { fibonacci, fibonacciIterative, fibonacciMemoization } from '../../src/index';
 
 describe('Fibonacci', () => {
 

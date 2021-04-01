@@ -1,6 +1,6 @@
 import 'mocha';
 import { expect } from 'chai';
-import { DoublyLinkedList } from '../../../src/ts/index';
+import { DoublyLinkedList } from '../../src/index';
 import MyObj from './my-obj';
 
 describe('DoublyLinkedList', () => {

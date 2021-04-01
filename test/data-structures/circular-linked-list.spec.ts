@@ -1,6 +1,6 @@
 import 'mocha';
 import { expect } from 'chai';
-import { CircularLinkedList } from '../../../src/ts/index';
+import { CircularLinkedList } from '../../src/index';
 import MyObj from './my-obj';
 
 describe('CircularLinkedList', () => {

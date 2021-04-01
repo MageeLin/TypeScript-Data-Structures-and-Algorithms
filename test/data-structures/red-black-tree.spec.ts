@@ -1,7 +1,7 @@
-import { Colors } from './../../../src/ts/data-structures/models/red-black-node';
+import { Colors } from './../../src/data-structures/models/red-black-node';
 import 'mocha';
 import { expect } from 'chai';
-import { RedBlackTree } from '../../../src/ts/index';
+import { RedBlackTree } from '../../src/index';
 
 describe('RedBlackTree', () => {
   let tree: RedBlackTree<number>;

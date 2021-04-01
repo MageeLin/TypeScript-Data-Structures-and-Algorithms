@@ -1,6 +1,6 @@
 import 'mocha';
 import { expect } from 'chai';
-import { IEqualsFunction } from '../../../../src/ts/util';
+import { IEqualsFunction } from '../../../src/util';
 
 interface CustomObject {
   key: number;

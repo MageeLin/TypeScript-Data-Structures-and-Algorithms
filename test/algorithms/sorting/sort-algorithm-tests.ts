@@ -1,6 +1,6 @@
 import 'mocha';
 import { expect } from 'chai';
-import { Compare } from '../../../../src/ts/util';
+import { Compare } from '../../../src/util';
 
 export function testSortAlgorithm(
   sortAlgorithm: Function,

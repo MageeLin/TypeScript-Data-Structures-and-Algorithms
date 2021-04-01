@@ -1,6 +1,6 @@
 import 'mocha';
 import { expect } from 'chai';
-import { lcs } from '../../../../src/ts/index';
+import { lcs } from '../../../src/index';
 
 describe('LCS Dynamic Programming', () => {
 

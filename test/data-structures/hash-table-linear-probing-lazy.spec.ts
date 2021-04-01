@@ -1,6 +1,6 @@
 import 'mocha';
 import { expect } from 'chai';
-import { HashTableLinearProbingLazy } from '../../../src/ts/index';
+import { HashTableLinearProbingLazy } from '../../src/index';
 import MyObj from './my-obj';
 
 describe('HashTableLinearProbingLazy', () => {

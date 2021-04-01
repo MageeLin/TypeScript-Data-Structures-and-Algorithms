@@ -1,6 +1,6 @@
 import 'mocha';
 import { expect } from 'chai';
-import { BinarySearchTree } from '../../../src/ts/index';
+import { BinarySearchTree } from '../../src/index';
 
 describe('BinarySearchTree', () => {
   let tree: BinarySearchTree<number>;

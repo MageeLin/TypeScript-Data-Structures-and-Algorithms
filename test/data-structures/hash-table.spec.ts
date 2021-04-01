@@ -1,6 +1,6 @@
 import 'mocha';
 import { expect } from 'chai';
-import { HashTable } from '../../../src/ts/index';
+import { HashTable } from '../../src/index';
 import MyObj from './my-obj';
 
 describe('HashTable', () => {

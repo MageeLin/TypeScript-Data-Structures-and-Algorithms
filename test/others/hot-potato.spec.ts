@@ -1,4 +1,4 @@
-import { hotPotato } from '../../../src/ts/others/hot-potato';
+import { hotPotato } from '../../src/others/hot-potato';
 import 'mocha';
 import { expect } from 'chai';
 

@@ -1,6 +1,6 @@
 import 'mocha';
 import { expect } from 'chai';
-import { palindromeChecker } from '../../../src/ts/others/palindrome-checker';
+import { palindromeChecker } from '../../src/others/palindrome-checker';
 
 describe('Palindrome', () => {
 

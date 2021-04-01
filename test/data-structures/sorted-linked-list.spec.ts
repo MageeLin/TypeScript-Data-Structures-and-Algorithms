@@ -1,6 +1,6 @@
 import 'mocha';
 import { expect } from 'chai';
-import { SortedLinkedList, util } from '../../../src/ts/index';
+import { SortedLinkedList, util } from '../../src/index';
 import MyObj from './my-obj';
 
 describe('SortedLinkedList', () => {

@@ -1,6 +1,6 @@
 import 'mocha';
 import { expect } from 'chai';
-import { hanoi, hanoiStack } from '../../../src/ts/others/hanoi';
+import { hanoi, hanoiStack } from '../../src/others/hanoi';
 
 describe('Tower of Hanoi', () => {
 

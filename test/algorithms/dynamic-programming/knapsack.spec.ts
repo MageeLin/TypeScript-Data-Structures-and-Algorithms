@@ -1,6 +1,6 @@
 import 'mocha';
 import { expect } from 'chai';
-import { knapSack } from '../../../../src/ts/index';
+import { knapSack } from '../../../src/index';
 
 describe('KnapSack Dynamic Programming', () => {
 

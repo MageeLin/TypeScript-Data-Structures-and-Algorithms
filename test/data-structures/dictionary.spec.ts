@@ -1,6 +1,6 @@
 import 'mocha';
 import { expect } from 'chai';
-import { Dictionary } from '../../../src/ts/index';
+import { Dictionary } from '../../src/index';
 import MyObj from './my-obj';
 
 describe('Dictionary', () => {

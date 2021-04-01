@@ -1,6 +1,6 @@
 import 'mocha';
 import { expect } from 'chai';
-import { factorialIterative, factorial } from '../../../src/ts/index';
+import { factorialIterative, factorial } from '../../src/index';
 
 describe('Factorial', () => {
 

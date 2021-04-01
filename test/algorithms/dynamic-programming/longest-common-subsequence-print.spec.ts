@@ -1,6 +1,6 @@
 import 'mocha';
 import { expect } from 'chai';
-import { lcsPrint } from '../../../../src/ts/index';
+import { lcsPrint } from '../../../src/index';
 
 describe('LCS Dynamic Programming with print solution', () => {
 

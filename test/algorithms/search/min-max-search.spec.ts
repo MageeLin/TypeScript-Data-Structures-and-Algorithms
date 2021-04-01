@@ -1,6 +1,6 @@
 import 'mocha';
 import { expect } from 'chai';
-import { findMinValue, findMaxValue } from '../../../../src/ts/index';
+import { findMinValue, findMaxValue } from '../../../src/index';
 
 describe('Min and Max Values Search', () => {
 

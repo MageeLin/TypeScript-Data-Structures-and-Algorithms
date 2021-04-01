@@ -1,4 +1,4 @@
-import { heapSort } from '../../../../src/ts/index';
+import { heapSort } from '../../../src/index';
 import { testSortAlgorithm } from './sort-algorithm-tests';
 
 testSortAlgorithm(heapSort, 'Heap Sort');

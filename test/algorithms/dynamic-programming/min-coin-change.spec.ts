@@ -1,6 +1,6 @@
 import 'mocha';
 import { expect } from 'chai';
-import { minCoinChange } from '../../../../src/ts/index';
+import { minCoinChange } from '../../../src/index';
 
 describe('Dynamic Programming: Min Coin Change', () => {
 

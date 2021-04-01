@@ -1,6 +1,6 @@
 import 'mocha';
 import { expect } from 'chai';
-import { Set } from '../../../src/ts/index';
+import { Set } from '../../src/index';
 import MyObj from './my-obj';
 
 describe('Set', () => {

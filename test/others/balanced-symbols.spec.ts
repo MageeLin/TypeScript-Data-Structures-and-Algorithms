@@ -1,6 +1,6 @@
 import 'mocha';
 import { expect } from 'chai';
-import { parenthesesChecker } from '../../../src/ts/others/balanced-symbols';
+import { parenthesesChecker } from '../../src/others/balanced-symbols';
 
 describe('Balanced Symbols', () => {
 

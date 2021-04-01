@@ -1,6 +1,6 @@
 import 'mocha';
 import { expect } from 'chai';
-import { baseConverter, decimalToBinary } from '../../../src/ts/others/base-converter';
+import { baseConverter, decimalToBinary } from '../../src/others/base-converter';
 
 describe('Base Converter', () => {
   it('decimalToBinary 1 -> 1', () => {

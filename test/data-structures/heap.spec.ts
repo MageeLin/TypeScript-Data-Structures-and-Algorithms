@@ -1,6 +1,6 @@
 import 'mocha';
 import { expect } from 'chai';
-import { MinHeap, heapSort } from '../../../src/ts/index';
+import { MinHeap, heapSort } from '../../src/index';
 
 describe('Heap', () => {
   let heap: MinHeap<number>;

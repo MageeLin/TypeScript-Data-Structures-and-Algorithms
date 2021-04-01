@@ -41,7 +41,7 @@
           "-r",
           "ts-node/register",
           "--colors",
-          "${workspaceRoot}/test/ts/**/**/*.spec.ts"
+          "${workspaceRoot}/test/**/**/*.spec.ts"
         ],
         "protocol": "auto",
         "internalConsoleOptions": "openOnSessionStart"

@@ -1,6 +1,6 @@
 import 'mocha';
 import { expect } from 'chai';
-import { shuffle } from '../../../../src/ts/index';
+import { shuffle } from '../../../src/index';
 
 describe('Fisher-Yates Suffle', () => {
 

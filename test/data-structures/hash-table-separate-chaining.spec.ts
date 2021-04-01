@@ -1,6 +1,6 @@
 import 'mocha';
 import { expect } from 'chai';
-import { HashTableSeparateChaining } from '../../../src/ts/index';
+import { HashTableSeparateChaining } from '../../src/index';
 import MyObj from './my-obj';
 
 describe('HashTableSeparateChaining', () => {
