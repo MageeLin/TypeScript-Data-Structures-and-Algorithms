@@ -1,29 +1,26 @@
 {
-  "name": "javascript-datastructures-algorithms",
+  "name": "typescript-datastructures-algorithms",
   "version": "0.0.1",
-  "description": "Learning JavaScript Data Structures and Algorithms",
+  "description": "TypeScript数据结构与算法",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/loiane/javascript-datastructures-algorithms.git"
+    "url": "git+https://github.com/MageeLin/TypeScript-Data-Structures-and-Algorithms.git"
   },
   "keywords": [],
-  "author": "Loiane Groner",
+  "author": "Magee Lin",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/loiane/javascript-datastructures-algorithms/issues"
+    "url": "https://github.com/MageeLin/TypeScript-Data-Structures-and-Algorithms/issues"
   },
-  "homepage": "https://github.com/loiane/javascript-datastructures-algorithms",
+  "homepage": "https://github.com/MageeLin/TypeScript-Data-Structures-and-Algorithms",
   "scripts": {
     "clean": "rm -rf ./dist ./coverage ./.nyc_output ./coverage.lcov ./mochawesome-report",
-    "build:js": "babel src/js -d dist/js",
     "build:ts": "tsc -p ./ --rootDir ./src/ts",
-    "build": "npm run build:js && npm run build:ts",
-    "lint:js": "eslint src/js && eslint test/js",
+    "build": "npm run build:ts",
     "lint:ts": "tslint -c tslint.json 'src/ts/**/*.ts' && tslint -c tslint.json 'test/ts/**/*.ts'",
-    "lint": "npm run lint:js && npm run lint:ts",
-    "test:js": "mocha --compilers js:babel-core/register ./test/js  --recursive --reporter mochawesome",
+    "lint": "npm run lint:ts",
     "test:ts": "mocha -r ts-node/register ./test/ts/**/*.spec.ts ./test/ts/**/**/*.spec.ts --recursive",
-    "test": "npm run test:js && npm run test:ts",
+    "test": "npm run test:ts",
     "dev": "npm run clean && npm run lint && npm run webpack && npm run generate-report",
     "dev2": "npm run clean && npm run lint && npm run webpack && npm run generate-report2",
     "coverage": "npm run generate-report && nyc report --reporter=text-lcov > coverage.lcov && codecov",
@@ -36,9 +33,7 @@
   "nyc": {
     "include": [
       "src/ts/*.ts",
-      "src/ts/**/*.ts",
-      "src/js/*.js",
-      "src/js/**/*.js"
+      "src/ts/**/*.ts"
     ],
     "exclude": [
       "typings"
