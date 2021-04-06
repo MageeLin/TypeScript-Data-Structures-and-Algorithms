@@ -75,31 +75,3 @@ export { matrixChainOrder } from './algorithms/dynamic-programing/matrix-chain-m
 export { matrixChainOrder as matrixChainOrderGreedy } from './algorithms/greedy/matrix-chain-multiplication';
 export { ratInAMaze } from './algorithms/backtracking/rat-in-maze';
 export { sudokuSolver } from './algorithms/backtracking/sudoku-solver';
-
-
-
-/* import { hotPotato } from './others/hot-potato';
-import { palindromeChecker } from './others/palindrome-checker';
-import Deque from './data-structures/deque';
-import Queue from './data-structures/queue';
-import { hanoi, hanoiStack } from './others/hanoi';
-import { baseConverter, decimalToBinary } from './others/base-converter';
-import StackArray from './data-structures/stack-array';
-import Stack from './data-structures/stack';
-import { parenthesesChecker } from './others/balanced-symbols';
-import { MinHeap, MaxHeap } from './data-structures/heap';
-
-
-export {
-  Stack,
-  StackArray,
-  parenthesesChecker,
-  baseConverter,
-  decimalToBinary,
-  hanoi,
-  hanoiStack,
-  Queue,
-  Deque,
-  hotPotato,
-  palindromeChecker
-}; */
