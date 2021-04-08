@@ -1,129 +1,129 @@
 import 'mocha';
 import { expect } from 'chai';
-import { Set } from '../../src/index';
+import { CustomSet } from '../../src/index';
 import MyObj from './my-obj';
 
-describe('Set', () => {
-  let set: Set<number>;
+describe('CustomSet', () => {
+  let customSet: CustomSet<number>;
 
   beforeEach(() => {
-    set = new Set<number>();
+    customSet = new CustomSet<number>();
   });
 
   it('starts empty', () => {
-    expect(set.size()).to.equal(0);
-    expect(set.isEmpty()).to.equal(true);
+    expect(customSet.size()).to.equal(0);
+    expect(customSet.isEmpty()).to.equal(true);
   });
 
   it('adds elements', () => {
     for (let i = 1; i < 5; i++) {
-      set.add(i);
-      expect(set.size()).to.equal(i);
+      customSet.add(i);
+      expect(customSet.size()).to.equal(i);
     }
 
-    expect(set.isEmpty()).to.equal(false);
+    expect(customSet.isEmpty()).to.equal(false);
   });
 
   it('does not allow duplicated elements', () => {
     let expected = true;
     for (let i = 1; i < 5; i++) {
-      expect(set.add(i)).to.equal(expected);
+      expect(customSet.add(i)).to.equal(expected);
     }
 
     expected = false;
     for (let i = 1; i < 5; i++) {
-      expect(set.add(i)).to.equal(expected);
+      expect(customSet.add(i)).to.equal(expected);
     }
   });
 
   it('deletes elements', () => {
     for (let i = 1; i < 5; i++) {
-      set.add(i);
+      customSet.add(i);
     }
 
     for (let i = 1; i < 5; i++) {
-      expect(set.delete(i)).to.equal(true);
+      expect(customSet.delete(i)).to.equal(true);
     }
 
     // elements do not exist
     for (let i = 1; i < 5; i++) {
-      expect(set.delete(i)).to.equal(false);
+      expect(customSet.delete(i)).to.equal(false);
     }
 
-    expect(set.isEmpty()).to.equal(true);
+    expect(customSet.isEmpty()).to.equal(true);
   });
 
   it('returns if element exists', () => {
     for (let i = 1; i < 5; i++) {
-      set.add(i);
-      expect(set.has(i)).to.equal(true);
+      customSet.add(i);
+      expect(customSet.has(i)).to.equal(true);
     }
 
     for (let i = 1; i < 5; i++) {
-      expect(set.delete(i)).to.equal(true);
-      expect(set.has(i)).to.equal(false);
+      expect(customSet.delete(i)).to.equal(true);
+      expect(customSet.has(i)).to.equal(false);
     }
   });
 
   it('returns the correct size', () => {
-    expect(set.size()).to.equal(0);
+    expect(customSet.size()).to.equal(0);
 
     for (let i = 1; i < 5; i++) {
-      set.add(i);
-      expect(set.size()).to.equal(i);
+      customSet.add(i);
+      expect(customSet.size()).to.equal(i);
     }
 
     const max = 5;
     for (let i = 1; i < max; i++) {
-      set.delete(i);
-      expect(set.size()).to.equal(max - i - 1);
+      customSet.delete(i);
+      expect(customSet.size()).to.equal(max - i - 1);
     }
 
-    expect(set.size()).to.equal(0);
-    expect(set.isEmpty()).to.equal(true);
+    expect(customSet.size()).to.equal(0);
+    expect(customSet.isEmpty()).to.equal(true);
   });
 
   it('returns if it is empty', () => {
-    expect(set.isEmpty()).to.equal(true);
+    expect(customSet.isEmpty()).to.equal(true);
 
     for (let i = 1; i < 5; i++) {
-      set.add(i);
-      expect(set.isEmpty()).to.equal(false);
+      customSet.add(i);
+      expect(customSet.isEmpty()).to.equal(false);
     }
 
     for (let i = 1; i < 5; i++) {
-      set.delete(i);
-      expect(set.isEmpty()).to.equal(!(i < 4));
+      customSet.delete(i);
+      expect(customSet.isEmpty()).to.equal(!(i < 4));
     }
 
-    expect(set.size()).to.equal(0);
-    expect(set.isEmpty()).to.equal(true);
+    expect(customSet.size()).to.equal(0);
+    expect(customSet.isEmpty()).to.equal(true);
   });
 
-  it('clears the set', () => {
-    set.clear();
-    expect(set.isEmpty()).to.equal(true);
+  it('clears the customSet', () => {
+    customSet.clear();
+    expect(customSet.isEmpty()).to.equal(true);
 
-    set.add(1);
-    set.add(2);
+    customSet.add(1);
+    customSet.add(2);
 
-    set.clear();
-    expect(set.isEmpty()).to.equal(true);
+    customSet.clear();
+    expect(customSet.isEmpty()).to.equal(true);
   });
 
   function addValues(min: number, max: number) {
-    set = new Set();
+    customSet = new CustomSet();
 
     for (let i = min; i <= max; i++) {
-      set.add(i);
+      customSet.add(i);
     }
 
-    return set;
+    return customSet;
   }
 
-  it('union between empty sets', () => {
-    const set1 = new Set();
-    const set2 = new Set();
+  it('union between empty customSets', () => {
+    const set1 = new CustomSet();
+    const set2 = new CustomSet();
 
     let setResult = set1.union(set2);
     expect(setResult.isEmpty()).to.equal(true);
@@ -132,7 +132,7 @@ describe('Set', () => {
     expect(setResult.isEmpty()).to.equal(true);
   });
 
-  it('union between equal sets', () => {
+  it('union between equal customSets', () => {
     const set1 = addValues(1, 5);
     const set2 = addValues(1, 5);
 
@@ -147,7 +147,7 @@ describe('Set', () => {
     }
   });
 
-  it('union between different sets', () => {
+  it('union between different customSets', () => {
     const set1 = addValues(1, 5);
     const set2 = addValues(6, 10);
 
@@ -162,7 +162,7 @@ describe('Set', () => {
     }
   });
 
-  it('union between sets with common values', () => {
+  it('union between customSets with common values', () => {
     const set1 = addValues(1, 5);
     const set2 = addValues(3, 6);
 
@@ -177,9 +177,9 @@ describe('Set', () => {
     }
   });
 
-  it('intersection between empty sets', () => {
-    const set1 = new Set();
-    const set2 = new Set();
+  it('intersection between empty customSets', () => {
+    const set1 = new CustomSet();
+    const set2 = new CustomSet();
 
     let setResult = set1.intersection(set2);
     expect(setResult.isEmpty()).to.equal(true);
@@ -188,7 +188,7 @@ describe('Set', () => {
     expect(setResult.isEmpty()).to.equal(true);
   });
 
-  it('intersection between equal sets', () => {
+  it('intersection between equal customSets', () => {
     const set1 = addValues(1, 5);
     const set2 = addValues(1, 5);
 
@@ -203,7 +203,7 @@ describe('Set', () => {
     }
   });
 
-  it('intersection different sets', () => {
+  it('intersection different customSets', () => {
     const set1 = addValues(1, 5);
     const set2 = addValues(6, 10);
 
@@ -214,7 +214,7 @@ describe('Set', () => {
     expect(setResult.isEmpty()).to.equal(true);
   });
 
-  it('intersection between sets with common values', () => {
+  it('intersection between customSets with common values', () => {
     const set1 = addValues(1, 5);
     const set2 = addValues(3, 6);
 
@@ -229,9 +229,9 @@ describe('Set', () => {
     }
   });
 
-  it('difference between empty sets', () => {
-    const set1 = new Set();
-    const set2 = new Set();
+  it('difference between empty customSets', () => {
+    const set1 = new CustomSet();
+    const set2 = new CustomSet();
 
     let setResult = set1.difference(set2);
     expect(setResult.isEmpty()).to.equal(true);
@@ -240,7 +240,7 @@ describe('Set', () => {
     expect(setResult.isEmpty()).to.equal(true);
   });
 
-  it('difference between equal sets', () => {
+  it('difference between equal customSets', () => {
     const set1 = addValues(1, 5);
     const set2 = addValues(1, 5);
 
@@ -251,7 +251,7 @@ describe('Set', () => {
     expect(setResult.isEmpty()).to.equal(true);
   });
 
-  it('difference different sets', () => {
+  it('difference different customSets', () => {
     const set1 = addValues(1, 5);
     const set2 = addValues(6, 10);
 
@@ -266,7 +266,7 @@ describe('Set', () => {
     }
   });
 
-  it('difference between sets with common values', () => {
+  it('difference between customSets with common values', () => {
     const set1 = addValues(1, 5);
     const set2 = addValues(3, 6);
 
@@ -281,15 +281,15 @@ describe('Set', () => {
     }
   });
 
-  it('isSubsetOf between empty sets', () => {
-    const set1 = new Set();
-    const set2 = new Set();
+  it('isSubsetOf between empty customSets', () => {
+    const set1 = new CustomSet();
+    const set2 = new CustomSet();
 
     expect(set1.isSubsetOf(set2)).to.equal(true);
     expect(set2.isSubsetOf(set1)).to.equal(true);
   });
 
-  it('isSubsetOf between equal sets', () => {
+  it('isSubsetOf between equal customSets', () => {
     const set1 = addValues(1, 5);
     const set2 = addValues(1, 5);
 
@@ -297,7 +297,7 @@ describe('Set', () => {
     expect(set2.isSubsetOf(set1)).to.equal(true);
   });
 
-  it('isSubsetOf different sets', () => {
+  it('isSubsetOf different customSets', () => {
     const set1 = addValues(1, 5);
     const set2 = addValues(6, 10);
 
@@ -305,7 +305,7 @@ describe('Set', () => {
     expect(set2.isSubsetOf(set1)).to.equal(false);
   });
 
-  it('isSubsetOf between sets with common values', () => {
+  it('isSubsetOf between customSets with common values', () => {
     const set1 = addValues(1, 8);
     const set2 = addValues(3, 6);
     expect(set1.isSubsetOf(set2)).to.equal(false);
@@ -318,20 +318,20 @@ describe('Set', () => {
   });
 
   it('returns toString primitive types', () => {
-    expect(set.toString()).to.equal('');
+    expect(customSet.toString()).to.equal('');
 
-    set.add(1);
-    expect(set.toString()).to.equal('1');
+    customSet.add(1);
+    expect(customSet.toString()).to.equal('1');
 
-    set.add(2);
-    expect(set.toString()).to.equal('1,2');
+    customSet.add(2);
+    expect(customSet.toString()).to.equal('1,2');
 
-    set.clear();
-    expect(set.toString()).to.equal('');
+    customSet.clear();
+    expect(customSet.toString()).to.equal('');
   });
 
   it('returns toString primitive types: string', () => {
-    const ds = new Set<string>();
+    const ds = new CustomSet<string>();
     ds.add('el1');
     expect(ds.toString()).to.equal('el1');
 
@@ -340,7 +340,7 @@ describe('Set', () => {
   });
 
   it('returns toString objects', () => {
-    const ds = new Set<MyObj>();
+    const ds = new CustomSet<MyObj>();
     expect(ds.toString()).to.equal('');
 
     ds.add(new MyObj(1, 2));
