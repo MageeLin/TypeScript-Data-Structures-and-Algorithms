@@ -6,7 +6,8 @@ export { default as DoublyLinkedList } from './data-structures/doubly-linked-lis
 export { default as CircularLinkedList } from './data-structures/circular-linked-list';
 export { default as SortedLinkedList } from './data-structures/sorted-linked-list';
 export { default as StackLinkedList } from './data-structures/stack-linked-list';
-export { default as Set } from './data-structures/set';
+export { default as CustomSet } from './data-structures/set';
+export { default as MultiSet } from './data-structures/multi-set';
 export { default as Dictionary } from './data-structures/dictionary';
 export { default as HashTable } from './data-structures/hash-table';
 export { default as HashTableSeparateChaining } from './data-structures/hash-table-separate-chaining';
