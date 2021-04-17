@@ -1,86 +1,123 @@
-import { defaultToString } from '../util';
-import { ValuePair } from './models/value-pair';
-
 export default class Dictionary<K, V> {
-  private table: { [key: string]: ValuePair<K, V> };
+  private table: Map<K, V>;
 
-  constructor(private toStrFn: (key: K) => string = defaultToString) {
-    this.table = {};
+  constructor() {
+    this.table = new Map();
   }
 
-  set(key: K, value: V) {
-    if (key != null && value != null) {
-      const tableKey = this.toStrFn(key);
-      this.table[tableKey] = new ValuePair(key, value);
-      return true;
-    }
-    return false;
+  /**
+   * @description: 设置键值对
+   * @param {K} key
+   * @param {V} value
+   * @return {boolean}
+   */
+  set(key: K, value: V): boolean {
+    this.table.set(key, value);
+    return true;
   }
 
+  /**
+   * @description: 根据键取值
+   * @param {K} key
+   * @return {V}
+   */
   get(key: K): V {
-    const valuePair = this.table[this.toStrFn(key)];
-    return valuePair == null ? undefined : valuePair.value;
+    return this.table.get(key);
   }
 
-  hasKey(key: K) {
-    return this.table[this.toStrFn(key)] != null;
+  /**
+   * @description: 返回是否有此键
+   * @param {K} key
+   * @return {boolean}
+   */
+  hasKey(key: K): boolean {
+    return this.table.has(key);
   }
 
-  remove(key: K) {
-    if (this.hasKey(key)) {
-      delete this.table[this.toStrFn(key)];
-      return true;
-    }
-    return false;
+  /**
+   * @description: 移除键值对
+   * @param {K} key
+   * @return {boolean}
+   */
+  remove(key: K):boolean {
+    return this.table.delete(key);
   }
 
+  /**
+   * @description: 返回值数组
+   * @return {Array<V>}
+   */
   values(): V[] {
-    return this.keyValues().map(
-      (valuePair: ValuePair<K, V>) => valuePair.value
-    );
+    return Array.from(this.table.values());
   }
 
+  /**
+   * @description: 返回键数组
+   * @return {Array<K>}
+   */
   keys(): K[] {
-    return this.keyValues().map(
-      (valuePair: ValuePair<K, V>) => valuePair.key
-    );
+    return Array.from(this.table.keys());
   }
 
-  keyValues(): ValuePair<K, V>[] {
-    return Object.values(this.table);
+  /**
+   * @description: 返回键值对数组
+   * @return {Array<K, V>}
+   */
+  keyValues(): [K, V][] {
+    return Array.from(this.table.entries());
   }
 
+  /**
+   * @description: 迭代整个字典
+   * @param {function} callbackFn
+   */
   forEach(callbackFn: (key: K, value: V) => any) {
     const valuePairs = this.keyValues();
     for (let i = 0; i < valuePairs.length; i++) {
-      const result = callbackFn(valuePairs[i].key, valuePairs[i].value);
-      if (result === false) {
+      // callbackFn 返回 false 时要终止迭代
+      if (callbackFn(valuePairs[i][0], valuePairs[i][1]) === false) {
         break;
       }
     }
   }
 
-  isEmpty() {
+  /**
+   * @description: 是否为空
+   * @return {boolean}
+   */
+  isEmpty(): boolean {
     return this.size() === 0;
   }
 
-  size() {
-    return Object.keys(this.table).length;
+  /**
+   * @description: 字典的大小
+   * @return {number}
+   */
+  size(): number {
+    return this.table.size;
   }
 
+  /**
+   * @description: 清空字典
+   */
   clear() {
-    this.table = {};
+    this.table.clear();
   }
 
-  toString() {
+  /**
+   * @description: 替代默认toString
+   * @return {string}
+   */
+  toString(): string {
     if (this.isEmpty()) {
-      return '';
+      return "";
     }
-    const valuePairs = this.keyValues();
-    let objString = `${valuePairs[0].toString()}`;
-    for (let i = 1; i < valuePairs.length; i++) {
-      objString = `${objString},${valuePairs[i].toString()}`;
+
+    let objStringList = [];
+    // 迭代 table
+    for (const [key, value] of this.table) {
+      objStringList.push(`[${key}: ${value}]`);
     }
-    return objString;
+    return objStringList.join(",");
   }
 }

@@ -18,30 +18,30 @@ describe('Dictionary', () => {
   it('sets undefined and null keys and values', () => {
     const dict = new Dictionary<string, number>();
 
-    expect(dict.set('undefined', undefined)).to.equal(false);
+    expect(dict.set('undefined', undefined)).to.equal(true);
     expect(dict.get('undefined')).to.equal(undefined);
 
     expect(dict.set('undefined', 1)).to.equal(true);
     expect(dict.get('undefined')).to.equal(1);
 
-    expect(dict.set('null', null)).to.equal(false);
-    expect(dict.get('null')).to.equal(undefined);
+    expect(dict.set('null', null)).to.equal(true);
+    expect(dict.get('null')).to.equal(null);
 
     expect(dict.set('null', 1)).to.equal(true);
     expect(dict.get('null')).to.equal(1);
 
     dict.clear();
-    expect(dict.set(undefined, undefined)).to.equal(false);
+    expect(dict.set(undefined, undefined)).to.equal(true);
     expect(dict.get(undefined)).to.equal(undefined);
 
-    expect(dict.set(undefined, 1)).to.equal(false);
-    expect(dict.get(undefined)).to.equal(undefined);
+    expect(dict.set(undefined, 1)).to.equal(true);
+    expect(dict.get(undefined)).to.equal(1);
 
-    expect(dict.set(null, null)).to.equal(false);
-    expect(dict.get(null)).to.equal(undefined);
+    expect(dict.set(null, null)).to.equal(true);
+    expect(dict.get(null)).to.equal(null);
 
-    expect(dict.set(null, 1)).to.equal(false);
-    expect(dict.get(null)).to.equal(undefined);
+    expect(dict.set(null, 1)).to.equal(true);
+    expect(dict.get(null)).to.equal(1);
   });
 
   it('sets values with string key', () => {
@@ -115,12 +115,9 @@ describe('Dictionary', () => {
     }
   });
 
-  function customToString(key: MyObj) {
-    return `####${key.toString()}`;
-  }
 
   it('sets values with custom toString function', () => {
-    const dict = new Dictionary<MyObj, MyObj>(customToString);
+    const dict = new Dictionary<MyObj, MyObj>();
     const min = 0;
     const max = 5;
     const size = max - min;
@@ -256,8 +253,8 @@ describe('Dictionary', () => {
     for (let i = 0; i < keys.length; i++) {
       expect(keys[i]).to.equal((i + 1));
       expect(values[i]).to.equal((i + 1));
-      expect(valuePairs[i].key).to.equal((i + 1));
-      expect(valuePairs[i].value).to.equal((i + 1));
+      expect(valuePairs[i][0]).to.equal((i + 1));
+      expect(valuePairs[i][1]).to.equal((i + 1));
     }
   });
 
@@ -301,10 +298,10 @@ describe('Dictionary', () => {
     expect(dictionary.toString()).to.equal('');
 
     dictionary.set(1, 1);
-    expect(dictionary.toString()).to.equal('[#1: 1]');
+    expect(dictionary.toString()).to.equal('[1: 1]');
 
     dictionary.set(2, 2);
-    expect(dictionary.toString()).to.equal('[#1: 1],[#2: 2]');
+    expect(dictionary.toString()).to.equal('[1: 1],[2: 2]');
 
     dictionary.clear();
     expect(dictionary.toString()).to.equal('');
@@ -313,10 +310,10 @@ describe('Dictionary', () => {
   it('returns toString primitive types: string', () => {
     const dict = new Dictionary<string, number>();
     dict.set('el1', 1);
-    expect(dict.toString()).to.equal('[#el1: 1]');
+    expect(dict.toString()).to.equal('[el1: 1]');
 
     dict.set('el2', 2);
-    expect(dict.toString()).to.equal('[#el1: 1],[#el2: 2]');
+    expect(dict.toString()).to.equal('[el1: 1],[el2: 2]');
   });
 
   it('returns toString objects', () => {
@@ -325,11 +322,11 @@ describe('Dictionary', () => {
 
     let myObj = new MyObj(1, 2);
     dict.set(myObj, myObj);
-    expect(dict.toString()).to.equal('[#1|2: 1|2]');
+    expect(dict.toString()).to.equal('[1|2: 1|2]');
 
     myObj = new MyObj(3, 4);
     dict.set(myObj, myObj);
-    expect(dict.toString()).to.equal('[#1|2: 1|2],[#3|4: 3|4]');
+    expect(dict.toString()).to.equal('[1|2: 1|2],[3|4: 3|4]');
   });
 
 });
