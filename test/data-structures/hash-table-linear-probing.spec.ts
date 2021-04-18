@@ -86,10 +86,10 @@ describe('HashTableLinearProbing', () => {
     expect(hashTable.size()).to.equal(size);
 
     const table = hashTable.getTable();
-    for (let i = min; i <= max; i++) {
-      expect(table[i].key).to.equal(i);
-      expect(table[i].value).to.equal(i);
-    }
+    Array.from(table.entries()).forEach(([hash, {key, value}],i) => {
+      expect(key).to.equal(i + min);
+      expect(value).to.equal(i + min);
+    });
   });
 
   it('puts values with string key without collisions', () => {
@@ -102,17 +102,17 @@ describe('HashTableLinearProbing', () => {
 
     const table = hashTable.getTable();
 
-    expect(table[12].key).to.equal('1');
-    expect(table[12].value).to.equal(1);
+    expect(table.get(12).key).to.equal('1');
+    expect(table.get(12).value).to.equal(1);
 
-    expect(table[23].key).to.equal('10');
-    expect(table[23].value).to.equal(10);
+    expect(table.get(23).key).to.equal('10');
+    expect(table.get(23).value).to.equal(10);
 
-    expect(table[34].key).to.equal('100');
-    expect(table[34].value).to.equal(100);
+    expect(table.get(34).key).to.equal('100');
+    expect(table.get(34).value).to.equal(100);
 
-    expect(table[8].key).to.equal('1000');
-    expect(table[8].value).to.equal(1000);
+    expect(table.get(8).key).to.equal('1000');
+    expect(table.get(8).value).to.equal(1000);
   });
 
   it('puts values with object key without collisions', () => {
@@ -126,20 +126,20 @@ describe('HashTableLinearProbing', () => {
 
     const table = hashTable.getTable();
 
-    expect(table[1].key).to.equal(myObjList[0]);
-    expect(table[1].value).to.equal(myObjList[0]);
+    expect(table.get(1).key).to.equal(myObjList[0]);
+    expect(table.get(1).value).to.equal(myObjList[0]);
 
-    expect(table[3].key).to.equal(myObjList[1]);
-    expect(table[3].value).to.equal(myObjList[1]);
+    expect(table.get(3).key).to.equal(myObjList[1]);
+    expect(table.get(3).value).to.equal(myObjList[1]);
 
-    expect(table[5].key).to.equal(myObjList[2]);
-    expect(table[5].value).to.equal(myObjList[2]);
+    expect(table.get(5).key).to.equal(myObjList[2]);
+    expect(table.get(5).value).to.equal(myObjList[2]);
 
-    expect(table[7].key).to.equal(myObjList[3]);
-    expect(table[7].value).to.equal(myObjList[3]);
+    expect(table.get(7).key).to.equal(myObjList[3]);
+    expect(table.get(7).value).to.equal(myObjList[3]);
 
-    expect(table[9].key).to.equal(myObjList[4]);
-    expect(table[9].value).to.equal(myObjList[4]);
+    expect(table.get(9).key).to.equal(myObjList[4]);
+    expect(table.get(9).value).to.equal(myObjList[4]);
   });
 
   function addValuesCollision() {
@@ -183,14 +183,14 @@ describe('HashTableLinearProbing', () => {
 
     const table = hashTable.getTable();
     for (let i = min; i <= max; i++) {
-      expect(table[i].key).to.equal(i);
-      expect(table[i].value).to.equal(i);
+      expect(table.get(i).key).to.equal(i);
+      expect(table.get(i).value).to.equal(i);
 
-      expect(table[i + size].key).to.equal(i);
-      expect(table[i + size].value).to.equal(i + 10);
+      expect(table.get(i + size).key).to.equal(i);
+      expect(table.get(i + size).value).to.equal(i + 10);
 
-      expect(table[i + size * 2].key).to.equal(i);
-      expect(table[i + size * 2].value).to.equal(i + 100);
+      expect(table.get(i + size * 2).key).to.equal(i);
+      expect(table.get(i + size * 2).value).to.equal(i + 100);
     }
 
     addValuesCollision();
@@ -275,14 +275,14 @@ describe('HashTableLinearProbing', () => {
     expect(hashTable.size()).to.equal(8);
 
     const table = hashTable.getTable();
-    expect(table[4].key).to.equal(')');
-    expect(table[5].key).to.equal(A);
-    expect(table[6].key).to.equal('+');
-    expect(table[7].key).to.equal(B);
-    expect(table[8].key).to.equal(',');
-    expect(table[9].key).to.equal(C);
-    expect(table[10].key).to.equal('-');
-    expect(table[11].key).to.equal('0');
+    expect(table.get(4).key).to.equal(')');
+    expect(table.get(5).key).to.equal(A);
+    expect(table.get(6).key).to.equal('+');
+    expect(table.get(7).key).to.equal(B);
+    expect(table.get(8).key).to.equal(',');
+    expect(table.get(9).key).to.equal(C);
+    expect(table.get(10).key).to.equal('-');
+    expect(table.get(11).key).to.equal('0');
 
     return hashTable;
   }
@@ -333,10 +333,10 @@ describe('HashTableLinearProbing', () => {
     expect(hashTable.toString()).to.equal('');
 
     hashTable.put(1, 1);
-    expect(hashTable.toString()).to.equal('{1 => [#1: 1]}');
+    expect(hashTable.toString()).to.equal('{1 => 1}');
 
     hashTable.put(2, 2);
-    expect(hashTable.toString()).to.equal('{1 => [#1: 1]},{2 => [#2: 2]}');
+    expect(hashTable.toString()).to.equal('{1 => 1},{2 => 2}');
 
     hashTable.clear();
     expect(hashTable.toString()).to.equal('');
@@ -346,10 +346,10 @@ describe('HashTableLinearProbing', () => {
     const hashTable = new HashTableLinearProbing<string, number>();
 
     hashTable.put('el1', 1);
-    expect(hashTable.toString()).to.equal('{36 => [#el1: 1]}');
+    expect(hashTable.toString()).to.equal('{el1 => 1}');
 
     hashTable.put('el2', 2);
-    expect(hashTable.toString()).to.equal('{0 => [#el2: 2]},{36 => [#el1: 1]}');
+    expect(hashTable.toString()).to.equal('{el1 => 1},{el2 => 2}');
   });
 
   it('returns toString objects without collisions', () => {
@@ -357,12 +357,12 @@ describe('HashTableLinearProbing', () => {
 
     let myObj = new MyObj(1, 2);
     hashTable.put(myObj, myObj);
-    expect(hashTable.toString()).to.equal('{1 => [#1|2: 1|2]}');
+    expect(hashTable.toString()).to.equal('{1|2 => 1|2}');
 
     myObj = new MyObj(3, 4);
     hashTable.put(myObj, myObj);
     expect(hashTable.toString()).to.equal(
-      '{1 => [#1|2: 1|2]},{5 => [#3|4: 3|4]}'
+      '{1|2 => 1|2},{3|4 => 3|4}'
     );
   });
 
@@ -372,14 +372,14 @@ describe('HashTableLinearProbing', () => {
     expect(hashTable.toString()).to.equal('');
 
     hashTable.put(1, 1);
-    expect(hashTable.toString()).to.equal('{1 => [#1: 1]}');
+    expect(hashTable.toString()).to.equal('{1 => 1}');
 
     hashTable.put(2, 2);
-    expect(hashTable.toString()).to.equal('{1 => [#1: 1]},{2 => [#2: 2]}');
+    expect(hashTable.toString()).to.equal('{1 => 1},{2 => 2}');
 
     hashTable.put(1, 10);
     expect(hashTable.toString()).to.equal(
-      '{1 => [#1: 1]},{2 => [#2: 2]},{3 => [#1: 10]}'
+      '{1 => 1},{2 => 2},{1 => 10}'
     );
 
     hashTable.clear();

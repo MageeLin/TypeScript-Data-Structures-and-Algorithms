@@ -1,16 +1,18 @@
-import { defaultToString } from '../util';
-import LinkedList from './linked-list';
-import { ValuePair } from './models/value-pair';
+import { defaultToString } from "../util";
+import LinkedList from "./linked-list";
 
 export default class HashTableSeparateChaining<K, V> {
-  protected table: { [key: string]: LinkedList<ValuePair<K, V>> };
+  protected table: Map<number, LinkedList<{ key: K; value: V }>>;
 
   constructor(protected toStrFn: (key: K) => string = defaultToString) {
-    this.table = {};
+    this.table = new Map();
   }
 
-  private loseloseHashCode(key: K) {
-    if (typeof key === 'number') {
+  /**
+   * @description: 哈希函数
+   */
+  private loseloseHashCode(key: K): number {
+    if (typeof key === "number") {
       return key;
     }
     const tableKey = this.toStrFn(key);
@@ -21,28 +23,40 @@ export default class HashTableSeparateChaining<K, V> {
     return hash % 37;
   }
 
-  hashCode(key: K) {
+  /**
+   * @description: 哈希函数封装
+   */
+  hashCode(key: K): number {
     return this.loseloseHashCode(key);
   }
 
-  put(key: K, value: V) {
+  /**
+   * @description: 更新散列表
+   */
+  put(key: K, value: V): boolean {
     if (key != null && value != null) {
       const position = this.hashCode(key);
 
-      if (this.table[position] == null) {
-        this.table[position] = new LinkedList<ValuePair<K, V>>();
+      // 当该hashcode不存在时，先创建一个链表
+      if (this.table.get(position) == null) {
+        this.table.set(position, new LinkedList<{ key: K; value: V }>());
       }
-      this.table[position].push(new ValuePair(key, value));
+      // 再给链表push值
+      this.table.get(position).push({ key, value });
       return true;
     }
     return false;
   }
 
-  get(key: K) {
+  /**
+   * @description: 根据键获取值
+   */
+  get(key: K): V {
     const position = this.hashCode(key);
-    const linkedList = this.table[position];
+    const linkedList = this.table.get(position);
     if (linkedList != null && !linkedList.isEmpty()) {
       let current = linkedList.getHead();
+      // 去链表中迭代查找键值对
       while (current != null) {
         if (current.element.key === key) {
           return current.element.value;
@@ -53,16 +67,20 @@ export default class HashTableSeparateChaining<K, V> {
     return undefined;
   }
 
-  remove(key: K) {
+  /**
+   * @description: 根据键移除值
+   */
+  remove(key: K): boolean {
     const position = this.hashCode(key);
-    const linkedList = this.table[position];
+    const linkedList = this.table.get(position);
     if (linkedList != null && !linkedList.isEmpty()) {
       let current = linkedList.getHead();
       while (current != null) {
         if (current.element.key === key) {
           linkedList.remove(current.element);
+          // 关键的一点，当链表为空以后，需要在tabel中删除掉hashcode
           if (linkedList.isEmpty()) {
-            delete this.table[position];
+            this.table.delete(position);
           }
           return true;
         }
@@ -72,35 +90,55 @@ export default class HashTableSeparateChaining<K, V> {
     return false;
   }
 
-  isEmpty() {
+  /**
+   * @description: 返回是否为空散列表
+   */
+  isEmpty(): boolean {
     return this.size() === 0;
   }
 
-  size() {
+  /**
+   * @description: 散列表的大小
+   */
+  size(): number {
     let count = 0;
-    Object.values(this.table).forEach(linkedList => count += linkedList.size());
+    // 迭代每个链表，累计求和
+    for (const [hashCode, linkedList] of this.table) {
+      count += linkedList.size();
+    }
     return count;
   }
 
+  /**
+   * @description: 清空散列表
+   */
   clear() {
-    this.table = {};
+    this.table.clear();
   }
 
+  /**
+   * @description: 返回内部table
+   */
   getTable() {
     return this.table;
   }
 
-  toString() {
+  /**
+   * @description: 替代默认的toString
+   */
+  toString(): string {
     if (this.isEmpty()) {
-      return '';
+      return "";
     }
-    const keys = Object.keys(this.table);
-    let objString = `{${keys[0]} => ${this.table[keys[0]].toString()}}`;
-    for (let i = 1; i < keys.length; i++) {
-      objString = `${objString},{${keys[i]} => ${this.table[
-        keys[i]
-      ].toString()}}`;
+
+    let objStringList = [];
+    for (const [hashCode, linkedList] of this.table) {
+      let node = linkedList.getHead();
+      while (node) {
+        objStringList.push(`{${node.element.key} => ${node.element.value}}`);
+        node = node.next;
+      }
     }
-    return objString;
+    return objStringList.join(",");
   }
 }

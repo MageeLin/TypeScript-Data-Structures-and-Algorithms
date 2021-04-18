@@ -1,15 +1,17 @@
-import { defaultToString } from '../util';
-import { ValuePair } from './models/value-pair';
+import { defaultToString } from "../util";
 
 export default class HashTableLinearProbing<K, V> {
-  protected table: { [key: string]: ValuePair<K, V> };
+  protected table: Map<number, { key: K; value: V }>;
 
   constructor(protected toStrFn: (key: K) => string = defaultToString) {
-    this.table = {};
+    this.table = new Map();
   }
 
-  private loseloseHashCode(key: K) {
-    if (typeof key === 'number') {
+  /**
+   * @description: 哈希函数
+   */
+  private loseloseHashCode(key: K): number {
+    if (typeof key === "number") {
       return key;
     }
     const tableKey = this.toStrFn(key);
@@ -20,61 +22,88 @@ export default class HashTableLinearProbing<K, V> {
     return hash % 37;
   }
 
-  hashCode(key: K) {
+  /**
+   * @description: 哈希函数封装
+   */
+  hashCode(key: K): number {
     return this.loseloseHashCode(key);
   }
 
-  put(key: K, value: V) {
+  /**
+   * @description: 更新散列表
+   */
+  put(key: K, value: V): boolean {
     if (key != null && value != null) {
       const position = this.hashCode(key);
 
-      if (this.table[position] == null) {
-        this.table[position] = new ValuePair(key, value);
+      if (this.table.get(position) == null) {
+        // 当hashcode位置为空时，可以直接添加
+        this.table.set(position, { key, value });
       } else {
+        // 否则需要迭代查找最近的空位置再添加
         let index = position + 1;
-        while (this.table[index] != null) {
+        while (this.table.get(index) != null) {
           index++;
         }
-        this.table[index] = new ValuePair(key, value);
+        this.table.set(index, { key, value });
       }
       return true;
     }
     return false;
   }
 
-  get(key: K) {
+  /**
+   * @description: 根据键获取值
+   */
+  get(key: K): V {
     const position = this.hashCode(key);
 
-    if (this.table[position] != null) {
-      if (this.table[position].key === key) {
-        return this.table[position].value;
+    if (this.table.get(position) != null) {
+      // 如果查到的hashcode位置就是要查的key，则直接返回
+      if (this.table.get(position).key === key) {
+        return this.table.get(position).value;
       }
+      // 否则需要迭代着向下查找
       let index = position + 1;
-      while (this.table[index] != null && this.table[index].key !== key) {
+      while (
+        this.table.get(index) != null &&
+        this.table.get(index).key !== key
+      ) {
         index++;
       }
-      if (this.table[index] != null && this.table[index].key === key) {
-        return this.table[position].value;
+      if (this.table.get(index) != null && this.table.get(index).key === key) {
+        return this.table.get(position).value;
       }
     }
+    // 最后也没查到，就返回undefined
     return undefined;
   }
 
-  remove(key: K) {
+  /**
+   * @description: 根据键移除值
+   */
+  remove(key: K): boolean {
     const position = this.hashCode(key);
 
-    if (this.table[position] != null) {
-      if (this.table[position].key === key) {
-        delete this.table[position];
+    if (this.table.get(position) != null) {
+      // 同理，如果hashcode对应位置就是要查的key，则直接删除
+      if (this.table.get(position).key === key) {
+        this.table.delete(position);
+        // 删除后处理副作用
         this.verifyRemoveSideEffect(key, position);
         return true;
       }
+      // 同理，如果hashcode对应的位置不是要查的key，就迭代查到
       let index = position + 1;
-      while (this.table[index] != null && this.table[index].key !== key) {
+      while (
+        this.table.get(index) != null &&
+        this.table.get(index).key !== key
+      ) {
         index++;
       }
-      if (this.table[index] != null && this.table[index].key === key) {
-        delete this.table[index];
+      if (this.table.get(index) != null && this.table.get(index).key === key) {
+        this.table.delete(index);
+        // 同样在删除后处理副作用
         this.verifyRemoveSideEffect(key, index);
         return true;
       }
@@ -82,47 +111,68 @@ export default class HashTableLinearProbing<K, V> {
     return false;
   }
 
+  /**
+   * @description: 处理移除键值对后的副作用
+   */
   private verifyRemoveSideEffect(key: K, removedPosition: number) {
     const hash = this.hashCode(key);
     let index = removedPosition + 1;
-    while (this.table[index] != null) {
-      const posHash = this.hashCode(this.table[index].key);
+    // 迭代着处理后面的每一个键值对
+    while (this.table.get(index) != null) {
+      const posHash = this.hashCode(this.table.get(index).key);
+      // 挨个向前挪动，关键点在于，hashcode值比较小的键值对尽量先向前补位
+      // 详细的说：如果当前元素的 hash 值小于或等于原始的 hash 值
+      // 或者当前元素的 hash 值小于或等于 removedPosition（也就是上一个被移除 key 的 hash 值），
+      // 表示我们需要将当前元素移动至 removedPosition 的位置
       if (posHash <= hash || posHash <= removedPosition) {
-        this.table[removedPosition] = this.table[index];
-        delete this.table[index];
+        this.table.set(removedPosition, this.table.get(index));
+        this.table.delete(index);
         removedPosition = index;
       }
       index++;
     }
   }
 
-  isEmpty() {
+  /**
+   * @description: 返回是否为空散列表
+   */
+  isEmpty(): boolean {
     return this.size() === 0;
   }
 
-  size() {
-    return Object.keys(this.table).length;
+  /**
+   * @description: 散列表的大小
+   */
+  size(): number {
+    return this.table.size;
   }
 
+  /**
+   * @description: 清空散列表
+   */
   clear() {
-    this.table = {};
+    this.table.clear();
   }
 
-  getTable() {
+  /**
+   * @description: 返回内部table
+   */
+  getTable(): Map<number, { key: K; value: V }> {
     return this.table;
   }
 
-  toString() {
+  /**
+   * @description: 替代默认的toString
+   */
+  toString(): string {
     if (this.isEmpty()) {
-      return '';
+      return "";
     }
-    const keys = Object.keys(this.table);
-    let objString = `{${keys[0]} => ${this.table[keys[0]].toString()}}`;
-    for (let i = 1; i < keys.length; i++) {
-      objString = `${objString},{${keys[i]} => ${this.table[
-        keys[i]
-      ].toString()}}`;
+
+    let objStringList = [];
+    for (const [hashCode, { key, value }] of this.table) {
+      objStringList.push(`{${key} => ${value}}`);
     }
-    return objString;
+    return objStringList.join(",");
   }
 }

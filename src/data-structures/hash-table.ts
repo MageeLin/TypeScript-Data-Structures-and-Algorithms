@@ -1,87 +1,99 @@
-import { defaultToString } from '../util';
-import { ValuePair } from './models/value-pair';
+import { defaultToString } from "../util";
 
 export default class HashTable<K, V> {
-  protected table: { [key: string]: ValuePair<K, V> };
+  protected table: Map<number, V>;
 
   constructor(protected toStrFn: (key: K) => string = defaultToString) {
-    this.table = {};
+    this.table = new Map();
   }
 
-  private loseloseHashCode(key: K) {
-    if (typeof key === 'number') {
+  /**
+   * @description: 哈希函数
+   */
+  private djb2HashCode(key: K): number {
+    if (typeof key === "number") {
       return key;
     }
     const tableKey = this.toStrFn(key);
-    let hash = 0;
-    for (let i = 0; i < tableKey.length; i++) {
-      hash += tableKey.charCodeAt(i);
-    }
-    return hash % 37;
-  }
-
-  /* private djb2HashCode(key: K) {
-    const tableKey = this.toStrFn(key);
     let hash = 5381;
     for (let i = 0; i < tableKey.length; i++) {
-      hash = (hash * 33) + tableKey.charCodeAt(i);
+      hash = hash * 33 + tableKey.charCodeAt(i);
     }
     return hash % 1013;
-  } */
-
-  hashCode(key: K) {
-    return this.loseloseHashCode(key);
   }
 
-  put(key: K, value: V) {
+  /**
+   * @description: 计算键的哈希值
+   */
+  hashCode(key: K): number {
+    return this.djb2HashCode(key);
+  }
+
+  /**
+   * @description: 更新散列表
+   */
+  put(key: K, value: V): boolean {
     if (key != null && value != null) {
       const position = this.hashCode(key);
-      this.table[position] = new ValuePair(key, value);
+      this.table.set(position, value);
       return true;
     }
     return false;
   }
 
-  get(key: K) {
-    const valuePair = this.table[this.hashCode(key)];
-    return valuePair == null ? undefined : valuePair.value;
+  /**
+   * @description: 根据键获取值
+   */
+  get(key: K): V {
+    return this.table.get(this.hashCode(key));
   }
 
-  remove(key: K) {
-    const hash = this.hashCode(key);
-    const valuePair = this.table[hash];
-    if (valuePair != null) {
-      delete this.table[hash];
-      return true;
-    }
-    return false;
+  /**
+   * @description: 根据键移除值
+   */
+  remove(key: K): boolean {
+    return this.table.delete(this.hashCode(key));
   }
 
-  getTable() {
+  /**
+   * @description: 返回内部table
+   */
+  getTable(): Map<number, V> {
     return this.table;
   }
 
-  isEmpty() {
+  /**
+   * @description: 返回是否为空散列表
+   */
+  isEmpty(): boolean {
     return this.size() === 0;
   }
 
-  size() {
-    return Object.keys(this.table).length;
+  /**
+   * @description: 散列表的大小
+   */
+  size(): number {
+    return this.table.size;
   }
 
+  /**
+   * @description: 清空散列表
+   */
   clear() {
-    this.table = {};
+    this.table.clear();
   }
 
-  toString() {
+  /**
+   * @description: 替代默认的toString
+   */
+  toString(): string {
     if (this.isEmpty()) {
-      return '';
+      return "";
     }
-    const keys = Object.keys(this.table);
-    let objString = `{${keys[0]} => ${this.table[keys[0]].toString()}}`;
-    for (let i = 1; i < keys.length; i++) {
-      objString = `${objString},{${keys[i]} => ${this.table[keys[i]].toString()}}`;
+    let objStringList = [];
+    for (const [hashCode, value] of this.table) {
+      objStringList.push(`{${hashCode} => ${value}}`)
     }
-    return objString;
+    return objStringList.join(',')
   }
 }
