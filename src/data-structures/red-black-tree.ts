@@ -1,6 +1,6 @@
-import { defaultCompare, ICompareFunction, Compare } from '../util';
-import BinarySearchTree from './binary-search-tree';
-import { RedBlackNode, Colors } from './models/red-black-node';
+import { defaultCompare, ICompareFunction, Compare } from "../util";
+import BinarySearchTree from "./binary-search-tree";
+import { RedBlackNode, Colors } from "./models/red-black-node";
 
 export default class RedBlackTree<T> extends BinarySearchTree<T> {
   protected root: RedBlackNode<T>;
@@ -10,171 +10,110 @@ export default class RedBlackTree<T> extends BinarySearchTree<T> {
   }
 
   /**
-   * Left left case: rotate right
+   * 左左情况: 右旋
+   * 不管是左旋还是右旋，实现的方式和AVL树的左旋右旋类似
+   * 但是要考虑父节点的变动
    *
-   *       b                           a
+   *       a                           c
    *      / \                         / \
-   *     a   e -> rotationLL(b) ->   c   b
+   *     c   b -> rotationLL(a) ->   d   a
    *    / \                             / \
-   *   c   d                           d   e
+   *   d   e                           e   b
    *
    * @param node Node<T>
    */
-  private rotationLL(node: RedBlackNode<T>) {
+  private rotationLL(node: RedBlackNode<T>): RedBlackNode<T> {
     const tmp = node.left;
     node.left = tmp.right;
-    if (tmp.right && tmp.right.key) {
-      tmp.right.parent = node;
-    }
-    tmp.parent = node.parent;
-    if (!node.parent) {
-      this.root = tmp;
-    } else {
-      if (node === node.parent.left) {
-        node.parent.left = tmp;
-      } else {
-        node.parent.right = tmp;
-      }
-    }
     tmp.right = node;
-    node.parent = tmp;
+    tmp.color = node.color;
+    node.color = Colors.RED;
+    return tmp;
   }
 
   /**
-   * Right right case: rotate left
+   * 右右情况: 左旋
    *
-   *     a                              b
+   *     b                              d
    *    / \                            / \
-   *   c   b   -> rotationRR(a) ->    a   e
+   *   a   d   -> rotationRR(b) ->    b   e
    *      / \                        / \
-   *     d   e                      c   d
+   *     c   e                      a   c
    *
    * @param node Node<T>
    */
-  private rotationRR(node: RedBlackNode<T>) {
+  private rotationRR(node: RedBlackNode<T>): RedBlackNode<T> {
     const tmp = node.right;
     node.right = tmp.left;
-    if (tmp.left && tmp.left.key) {
-      tmp.left.parent = node;
-    }
-    tmp.parent = node.parent;
-    if (!node.parent) {
-      this.root = tmp;
-    } else {
-      if (node === node.parent.left) {
-        node.parent.left = tmp;
-      } else {
-        node.parent.right = tmp;
-      }
-    }
     tmp.left = node;
-    node.parent = tmp;
+    tmp.color = node.color;
+    node.color = Colors.RED;
+    return tmp;
   }
 
+  /**
+   * @description: 插入键
+   */
   insert(key: T) {
-    // special case: first key
-    if (this.root == null) {
-      this.root = new RedBlackNode(key);
-      this.root.color = Colors.BLACK;
-    } else {
-      const newNode = this.insertNode(this.root, key);
-      this.fixTreeProperties(newNode);
-    }
-  }
-
-  protected insertNode(node: RedBlackNode<T>, key: T): RedBlackNode<T> {
-    if (this.compareFn(key, node.key) === Compare.LESS_THAN) {
-      if (node.left == null) {
-        node.left = new RedBlackNode(key);
-        node.left.parent = node;
-        return node.left;
-      } else {
-        return this.insertNode(node.left, key);
-      }
-    } else if (node.right == null) {
-      node.right = new RedBlackNode(key);
-      node.right.parent = node;
-      return node.right;
-    } else {
-      return this.insertNode(node.right, key);
-    }
-  }
-
-  private fixTreeProperties(node: RedBlackNode<T>) {
-    while (node && node.parent && node.parent.color === Colors.RED && node.color !== Colors.BLACK) {
-       let parent = node.parent;
-       const grandParent = parent.parent;
-
-      // case A
-      if (grandParent && grandParent.left === parent) {
-
-        const uncle = grandParent.right;
-
-        // case 1: uncle of node is also red - only recoloring
-        if (uncle && uncle.color === Colors.RED) {
-          grandParent.color = Colors.RED;
-          parent.color = Colors.BLACK;
-          uncle.color = Colors.BLACK;
-          node = grandParent;
-        } else {
-          // case 2: node is right child - left rotate
-          if (node === parent.right) {
-            this.rotationRR(parent);
-            node = parent;
-            parent = node.parent;
-          }
-
-          // case 3: node is left child - right rotate
-          this.rotationLL(grandParent);
-          // swap color
-          parent.color = Colors.BLACK;
-          grandParent.color = Colors.RED;
-          node = parent;
-        }
-
-      } else { // case B: parent is right child of grand parent
-
-        const uncle = grandParent.left;
-
-        // case 1: uncle is read - only recoloring
-        if (uncle && uncle.color === Colors.RED) {
-          grandParent.color = Colors.RED;
-          parent.color = Colors.BLACK;
-          uncle.color = Colors.BLACK;
-          node = grandParent;
-        } else {
-          // case 2: node is left child - left rotate
-          if (node === parent.left) {
-            this.rotationLL(parent);
-            node = parent;
-            parent = node.parent;
-          }
-
-           // case 3: node is right child - left rotate
-          this.rotationRR(grandParent);
-          // swap color
-          parent.color = Colors.BLACK;
-          grandParent.color = Colors.RED;
-          node = parent;
-        }
-      }
-    }
+    this.root = this.insertNode(this.root, key);
     this.root.color = Colors.BLACK;
   }
+
+  /**
+   * @description: 插入键的递归方法
+   */
+  protected insertNode(node: RedBlackNode<T>, key: T): RedBlackNode<T> {
+    // 基线条件，如果插入到空白节点处，就插入一个红节点
+    if (node == null) {
+      let node = new RedBlackNode(key);
+      node.color = Colors.RED;
+      return node;
+    }
+
+    // 递归点
+    if (this.compareFn(key, node.key) === Compare.LESS_THAN) {
+      node.left = this.insertNode(node.left, key);
+    } else if (this.compareFn(key, node.key) === Compare.BIGGER_THAN) {
+      node.right = this.insertNode(node.right, key);
+    } else {
+      node.key = key;
+    }
+
+    // 核心算法，通过三行判断，来生成一个左倾红黑树
+    // 右红左黑，左旋把红链接转到左侧来
+    if (this.isRed(node.right) && !this.isRed(node.left))
+      node = this.rotationRR(node);
+    // 左红并且左左也红，右旋
+    if (this.isRed(node.left) && this.isRed(node.left?.left))
+      node = this.rotationLL(node);
+    // 不管是旋出来的还是自然插入出来的，只要两红当兄弟，就变色，并把红色向上挪一层（相当于23树中加高一层）
+    if (this.isRed(node.left) && this.isRed(node.right)) this.flipColors(node);
+    return node;
+  }
+
 
   getRoot() {
     return this.root;
   }
 
-  /* private flipColors(node: RedBlackNode<T>) {
-    node.left.flipColor();
-    node.right.flipColor();
+  /**
+   * @description:修正节点颜色
+   */
+  private flipColors(node: RedBlackNode<T>) {
+    node.color = Colors.RED;
+    node.left.color = Colors.BLACK;
+    node.right.color = Colors.BLACK;
   }
 
+  /**
+   * @description: 判断节点是否为红色
+   */
   private isRed(node: RedBlackNode<T>) {
+    // 如果为空，也认为是黑色
+    // 这里很重要，相当于树底部全是黑色空节点
     if (!node) {
       return false;
     }
     return node.isRed();
-  }*/
+  }
 }
