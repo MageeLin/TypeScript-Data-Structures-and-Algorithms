@@ -17,8 +17,6 @@ describe('RedBlackTree', () => {
   it('inserts elements in the RedBlackTree', () => {
     expect(tree.getRoot()).to.equal(undefined);
 
-    let node;
-
     tree.insert(1);
     assertNode(tree.getRoot(), 1, Colors.BLACK);
 
@@ -96,8 +94,58 @@ describe('RedBlackTree', () => {
 
   });
 
+
+  it('delete elements in the RedBlackTree', () => {
+    expect(tree.getRoot()).to.equal(undefined);
+
+    tree.insert(1);
+    tree.insert(2);
+    tree.insert(3);
+    tree.insert(4);
+    tree.insert(5);
+    tree.insert(6);
+    tree.insert(7);
+    tree.insert(8);
+    tree.insert(9);
+    tree.insert(10);
+    assertNode(tree.getRoot(), 4, Colors.BLACK);
+    assertNode(tree.getRoot().left, 2, Colors.BLACK);
+    assertNode(tree.getRoot().right, 8, Colors.BLACK);
+    assertNode(tree.getRoot().left.left, 1, Colors.BLACK);
+    assertNode(tree.getRoot().left.right, 3, Colors.BLACK);
+    assertNode(tree.getRoot().right.left, 6, Colors.RED);
+    assertNode(tree.getRoot().right.right, 10, Colors.BLACK);
+    assertNode(tree.getRoot().right.left.left, 5, Colors.BLACK);
+    assertNode(tree.getRoot().right.left.right, 7, Colors.BLACK);
+    assertNode(tree.getRoot().right.right.left, 9, Colors.RED);
+
+    tree.delete(1);
+    console.dir( tree.getRoot());
+    assertNode(tree.getRoot(), 6, Colors.BLACK);
+    assertNode(tree.getRoot().left, 4, Colors.BLACK);
+    assertNode(tree.getRoot().right, 8, Colors.BLACK);
+    assertNode(tree.getRoot().left.left, 3, Colors.BLACK);
+    assertNode(tree.getRoot().left.right, 5, Colors.BLACK);
+    assertNode(tree.getRoot().right.left, 7, Colors.BLACK);
+    assertNode(tree.getRoot().right.right, 10, Colors.BLACK);
+    assertNode(tree.getRoot().left.left.left, 2, Colors.RED);
+    assertNode(tree.getRoot().right.right.left, 9, Colors.RED);
+    tree.delete(2);
+    assertNode(tree.getRoot(), 6, Colors.BLACK);
+    assertNode(tree.getRoot().left, 4, Colors.BLACK);
+    assertNode(tree.getRoot().right, 8, Colors.BLACK);
+    assertNode(tree.getRoot().left.left, 3, Colors.BLACK);
+    assertNode(tree.getRoot().left.right, 5, Colors.BLACK);
+    assertNode(tree.getRoot().right.left, 7, Colors.BLACK);
+    assertNode(tree.getRoot().right.right, 10, Colors.BLACK);
+    assertNode(tree.getRoot().right.right.left, 9, Colors.RED);
+
+  });
+
   function assertNode(node, key, color) {
     expect(node.color).to.equal(color);
     expect(node.key).to.equal(key);
   }
 });
+
+

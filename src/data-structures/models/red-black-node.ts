@@ -1,4 +1,4 @@
-import { Node } from './node';
+import { Node } from "./node";
 
 // 节点颜色枚举值
 export enum Colors {
@@ -26,14 +26,10 @@ export class RedBlackNode<K> extends Node<K> {
     return this.color === Colors.RED;
   }
 
-  // /**
-  //  * @description: 反转节点的颜色
-  //  */
-  // flipColor() {
-  //   if (this.color === Colors.RED) {
-  //     this.color = Colors.BLACK;
-  //   } else {
-  //     this.color = Colors.RED;
-  //   }
-  // }
+  /**
+   * @description: 位运算反转节点的颜色
+   */
+  flipColor() {
+    this.color = 1 ^ this.color;
+  }
 }
