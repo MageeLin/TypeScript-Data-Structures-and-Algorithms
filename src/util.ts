@@ -64,13 +64,16 @@ export function defaultToString(item: any): string {
   return item.toString();
 }
 
+/**
+ * @description: 交换数组中的两个位置处的值
+ */
 export function swap(array: any[], a: number, b: number) {
-  /* const temp = array[a];
-  array[a] = array[b];
-  array[b] = temp; */
   [array[a], array[b]] = [array[b], array[a]];
 }
 
+/**
+ * @description: 将compareFn反转
+ */
 export function reverseCompare<T>(compareFn: ICompareFunction<T>): ICompareFunction<T> {
   return (a, b) => compareFn(b, a);
 }
