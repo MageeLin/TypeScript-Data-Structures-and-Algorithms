@@ -43,17 +43,17 @@ function siftDown(
 }
 
 /**
- * @description:
+ * @description: 堆排序
  */
 export default function heapSort(array: any[], compareFn = defaultCompare) {
   let heapSize = array.length;
 
-  // 首先把除叶子节点外所有的树都规范成二叉堆
+  // 1.首先把除叶子节点外所有的树都规范成二叉堆
   for (let i = Math.floor(array.length / 2); i >= 0; i -= 1) {
     siftDown(array, i, array.length, compareFn);
   }
 
-  // 交换堆顶元素和最后的元素，相当于把堆顶元素放到最后面，最后一个元素挪到最前面
+  // 2.交换堆顶元素和最后的元素，相当于把堆顶元素放到最后面，最后一个元素挪到最前面
   // 然后执行siftDown来重新规范二叉堆
   while (heapSize > 1) {
     swap(array, 0, --heapSize);
